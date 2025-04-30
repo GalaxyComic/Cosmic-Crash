@@ -1,30 +1,29 @@
 #include "Game.hpp"
 
-Game::Game()
-    : window(sf::VideoMode(800, 600), "Game") {
-    // Initialisatiecode hier
+Game::Game() {
+    enemies.emplace_back();
 }
 
-void Game::run() {
-    while (window.isOpen()) {
-        handleInput();
-        update();
-        draw();
+void Game::handleInput(sf::RenderWindow& window) {
+    sf::Event event;
+    while (window.pollEvent(event)) {
+        if (event.type == sf::Event::Closed)
+            window.close();
     }
-}
 
-void Game::handleInput() {
-    // Verwerk gebruikersinvoer
+    player.handleInput();
 }
 
 void Game::update() {
-    // Werk de spelstatus bij
+    player.update();
+    for (auto& enemy : enemies)
+        enemy.update();
 }
 
-void Game::draw() {
+void Game::draw(sf::RenderWindow& window) {
     window.clear();
     window.draw(player);
-    for (const auto& astroid : enemies)
-        window.draw(astroid);
+    for (const auto& enemy : enemies)
+        window.draw(enemy);
     window.display();
 }

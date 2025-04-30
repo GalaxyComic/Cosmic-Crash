@@ -5,24 +5,22 @@
 int main() {
     sf::RenderWindow window(sf::VideoMode(800, 600), "Game");
 
-    MainMenu menu;
-    Game game;
-
-    bool inMenu = true;
+    GameState* state = new MainMenu();
 
     while (window.isOpen()) {
-        if (inMenu) {
-            menu.handleInput(window);
-            if (menu.isPlaySelected()) {
-                inMenu = false;
-                game.run();
-            }
-            if (menu.isExitSelected()) {
-                window.close();
-            }
-            menu.draw(window);
+        state->handleInput(window);
+        state->update();
+        state->draw(window);
+
+        if (state->shouldExit()) {
+            window.close();
+        }
+        else if (state->shouldSwitchState()) {
+            delete state;
+            state = new Game();
         }
     }
 
+    delete state;
     return 0;
 }

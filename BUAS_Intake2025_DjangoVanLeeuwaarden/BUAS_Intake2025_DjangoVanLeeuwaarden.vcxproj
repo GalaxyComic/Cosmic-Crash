@@ -143,6 +143,7 @@
   <ItemGroup>
     <ClInclude Include="src\entities\Astroid.hpp" />
     <ClInclude Include="src\entities\Player.hpp" />
+    <ClInclude Include="src\GameState.hpp" />
     <ClInclude Include="src\game\Game.hpp" />
     <ClInclude Include="src\menu\MainMenu.hpp" />
   </ItemGroup>

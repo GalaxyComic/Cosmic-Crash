@@ -1,17 +1,18 @@
+#pragma once
 #include <SFML/Graphics.hpp>
 #include "../entities/Player.hpp"
 #include "../entities/Astroid.hpp"
+#include "../GameState.hpp"
 
-class Game {
+class Game : public GameState {
 public:
     Game();
-    void run();
-    void handleInput();
-    void update();
-    void draw();
+
+    void handleInput(sf::RenderWindow& window) override;
+    void update() override;
+    void draw(sf::RenderWindow& window) override;
 
 private:
-    sf::RenderWindow window;
     Player player;
     std::vector<Astroid> enemies;
 };
