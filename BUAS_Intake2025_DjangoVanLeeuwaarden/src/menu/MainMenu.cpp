@@ -1,7 +1,7 @@
 #include "MainMenu.hpp"
 
 MainMenu::MainMenu()
-    : playSelected(true), exitSelected(false), startGame(false) {
+    : playSelected(true), exitSelected(true), startGame(false) {
 
     playBox.setSize(sf::Vector2f(200, 50));
     playBox.setPosition(100, 100);
@@ -11,33 +11,35 @@ MainMenu::MainMenu()
     exitBox.setPosition(100, 200);
     exitBox.setFillColor(sf::Color::White);
 }
-
 void MainMenu::handleInput(sf::RenderWindow& window) {
     sf::Event event;
+    sf::Vector2f mousePos = sf::Vector2f(sf::Mouse::getPosition(window));
+
+    // Hover effect
+    playSelected = playBox.getGlobalBounds().contains(mousePos);
+    exitSelected = exitBox.getGlobalBounds().contains(mousePos);
+
+    // Update colors based on hover
+    playBox.setFillColor(playSelected ? sf::Color::Yellow : sf::Color::White);
+    exitBox.setFillColor(exitSelected ? sf::Color::Yellow : sf::Color::White);
+
     while (window.pollEvent(event)) {
         if (event.type == sf::Event::Closed) {
-            exitSelected = true;
+            window.close();
         }
-        if (event.type == sf::Event::KeyPressed) {
-            if (event.key.code == sf::Keyboard::Up || event.key.code == sf::Keyboard::Down) {
-                playSelected = !playSelected;
-                exitSelected = !exitSelected;
+
+        if (event.type == sf::Event::MouseButtonPressed &&
+            event.mouseButton.button == sf::Mouse::Left) {
+            if (playSelected) {
+                startGame = true;
             }
-            if (event.key.code == sf::Keyboard::Enter) {
-                if (playSelected) {
-                    startGame = true;
-                }
-                else if (exitSelected) {
-                    exitSelected = true;
-                }
+            if (exitSelected) {
+                exitSelected = true;
             }
         }
     }
-
-    // Update colors based on selection
-    playBox.setFillColor(playSelected ? sf::Color::Yellow : sf::Color::White);
-    exitBox.setFillColor(exitSelected ? sf::Color::Yellow : sf::Color::White);
 }
+
 
 void MainMenu::draw(sf::RenderWindow& window) {
     window.clear();
