@@ -131,9 +131,6 @@
     <Text Include="README.txt" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="src\entities\Astroid.cpp" />
     <ClCompile Include="src\entities\Player.cpp" />
     <ClCompile Include="src\game\Game.cpp" />
@@ -146,6 +143,9 @@
     <ClInclude Include="src\GameState.hpp" />
     <ClInclude Include="src\game\Game.hpp" />
     <ClInclude Include="src\menu\MainMenu.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

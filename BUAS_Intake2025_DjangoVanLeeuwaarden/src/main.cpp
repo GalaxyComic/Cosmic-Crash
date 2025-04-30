@@ -3,7 +3,8 @@
 #include "game/Game.hpp"
 
 int main() {
-    sf::RenderWindow window(sf::VideoMode(800, 600), "Game");
+	sf::VideoMode desktop = sf::VideoMode::getDesktopMode();
+	sf::RenderWindow window(desktop, "Game", sf::Style::Fullscreen);
 
     GameState* state = new MainMenu();
 

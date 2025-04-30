@@ -4,9 +4,6 @@
     <Text Include="README.txt" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\entities\Player.cpp" />
     <ClCompile Include="src\entities\Astroid.cpp" />
@@ -18,5 +15,9 @@
     <ClInclude Include="src\entities\Player.hpp" />
     <ClInclude Include="src\menu\MainMenu.hpp" />
     <ClInclude Include="src\game\Game.hpp" />
+    <ClInclude Include="src\GameState.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
 </Project>
