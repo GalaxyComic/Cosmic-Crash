@@ -17,7 +17,10 @@ private:
     sf::RectangleShape playBox;
     sf::RectangleShape exitBox;
 
-    bool playSelected;
-    bool exitSelected;
+    bool playHovered;
+    bool exitHovered;
+
     bool startGame;
+    bool exitClicked;
+
 };

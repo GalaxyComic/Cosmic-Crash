@@ -1,8 +1,8 @@
 #include "MainMenu.hpp"
 
 MainMenu::MainMenu()
-    : playSelected(true), exitSelected(true), startGame(false) {
-
+    : playHovered(false), exitHovered(false),
+    startGame(false), exitClicked(false) {
     playBox.setSize(sf::Vector2f(200, 50));
     playBox.setPosition(100, 100);
     playBox.setFillColor(sf::Color::Yellow);
@@ -11,17 +11,18 @@ MainMenu::MainMenu()
     exitBox.setPosition(100, 200);
     exitBox.setFillColor(sf::Color::White);
 }
+
 void MainMenu::handleInput(sf::RenderWindow& window) {
     sf::Event event;
-    sf::Vector2f mousePos = sf::Vector2f(sf::Mouse::getPosition(window));
+    sf::Vector2f mousePos = static_cast<sf::Vector2f>(sf::Mouse::getPosition(window));
 
-    // Hover effect
-    playSelected = playBox.getGlobalBounds().contains(mousePos);
-    exitSelected = exitBox.getGlobalBounds().contains(mousePos);
+    // Update hover status
+    playHovered = playBox.getGlobalBounds().contains(mousePos);
+    exitHovered = exitBox.getGlobalBounds().contains(mousePos);
 
-    // Update colors based on hover
-    playBox.setFillColor(playSelected ? sf::Color::Yellow : sf::Color::White);
-    exitBox.setFillColor(exitSelected ? sf::Color::Yellow : sf::Color::White);
+    // Update box colors based on hover
+    playBox.setFillColor(playHovered ? sf::Color::Yellow : sf::Color::White);
+    exitBox.setFillColor(exitHovered ? sf::Color::Yellow : sf::Color::White);
 
     while (window.pollEvent(event)) {
         if (event.type == sf::Event::Closed) {
@@ -30,15 +31,16 @@ void MainMenu::handleInput(sf::RenderWindow& window) {
 
         if (event.type == sf::Event::MouseButtonPressed &&
             event.mouseButton.button == sf::Mouse::Left) {
-            if (playSelected) {
+            if (playHovered) {
                 startGame = true;
             }
-            if (exitSelected) {
-                exitSelected = true;
+            if (exitHovered) {
+                exitClicked = true;
             }
         }
     }
 }
+
 
 
 void MainMenu::draw(sf::RenderWindow& window) {
@@ -55,5 +57,5 @@ bool MainMenu::shouldSwitchState() const {
 }
 
 bool MainMenu::shouldExit() const {
-    return exitSelected && !startGame;
+    return exitClicked && !startGame;
 }
