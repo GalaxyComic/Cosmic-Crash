@@ -2,7 +2,7 @@
 
 Game::Game()
     : window(sf::VideoMode(800, 600), "Game") {
-    // Initialize game elements
+    // Initialisatiecode hier
 }
 
 void Game::run() {
@@ -14,11 +14,11 @@ void Game::run() {
 }
 
 void Game::handleInput() {
-    // Handle player input
+    // Verwerk gebruikersinvoer
 }
 
 void Game::update() {
-    // Update game logic
+    // Werk de spelstatus bij
 }
 
 void Game::draw() {

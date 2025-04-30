@@ -1,6 +1,6 @@
 #include <SFML/Graphics.hpp>
-#include "Player.hpp"
-#include "Astroid.hpp"
+#include "../entities/Player.hpp"
+#include "../entities/Astroid.hpp"
 
 class Game {
 public:

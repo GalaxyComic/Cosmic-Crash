@@ -132,11 +132,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="src\game\Game.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\entities\Astroid.cpp" />
     <ClCompile Include="src\entities\Player.cpp" />
+    <ClCompile Include="src\game\Game.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\menu\MainMenu.cpp" />
   </ItemGroup>

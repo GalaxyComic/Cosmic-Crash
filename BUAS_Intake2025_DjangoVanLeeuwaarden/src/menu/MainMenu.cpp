@@ -26,7 +26,7 @@ void MainMenu::handleInput(sf::RenderWindow& window) {
             }
             if (event.key.code == sf::Keyboard::Enter) {
                 if (playSelected)
-                    // Start game
+					playSelected = true;
                 else if (exitSelected)
                     window.close();
             }
