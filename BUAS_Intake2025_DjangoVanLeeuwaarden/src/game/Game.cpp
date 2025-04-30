@@ -1,13 +1,24 @@
 #include "Game.hpp"
+#include <iostream>
 
-Game::Game() {
-    // Load textures
-    backgroundTexture.loadFromFile("assets/background.png");
-    earthTexture.loadFromFile("assets/earth_pixel_art.png");
+Game::Game()
+    : currentFrame(0), frameTime(15.0f), elapsedTime(0.f) {
+
+    // Load the background texture
+    if (!backgroundTexture.loadFromFile("assets/background.png")) {
+        std::cerr << "Error loading background texture!" << std::endl;
+    }
+
+    // Load each frame of the Earth GIF (120frames)
+    for (int i = 0; i < 60; i++) {
+        if (!earthTextures[i].loadFromFile("assets/earth/4169310314-" + std::to_string(i) + ".png")) {
+            std::cerr << "Error loading Earth frame " << i << "!" << std::endl;
+        }
+    }
 
     // Set textures to sprites
     backgroundSprite.setTexture(backgroundTexture);
-    earthSprite.setTexture(earthTexture);
+    earthSprite.setTexture(earthTextures[currentFrame]);
 
     // Ensure the Earth sprite is centered by setting the origin
     sf::FloatRect bounds = earthSprite.getLocalBounds();
@@ -32,6 +43,22 @@ void Game::scaleBackgroundToFit(const sf::RenderWindow& window) {
     backgroundSprite.setScale(scaleX, scaleY);
 }
 
+void Game::updateEarthAnimation() {
+    // Update the animation frame based on elapsed time
+    elapsedTime += 1.f / 60.f;  // Assuming a 60 FPS game loop
+
+    if (elapsedTime >= frameTime) {
+        // Increment current frame and loop if necessary
+        currentFrame = (currentFrame + 1) % 60;  // Assuming 60 frames
+
+        // Update the Earth sprite texture to the current frame
+        earthSprite.setTexture(earthTextures[currentFrame]);
+
+        // Reset the timer for the next frame
+        elapsedTime = 0.f;
+    }
+}
+
 void Game::handleInput(sf::RenderWindow& window) {
     sf::Event event;
     while (window.pollEvent(event)) {
@@ -49,6 +76,9 @@ void Game::update() {
     for (auto& enemy : enemies) {
         enemy.update();
     }
+
+    // Update Earth animation
+    updateEarthAnimation();
 }
 
 void Game::draw(sf::RenderWindow& window) {
@@ -57,8 +87,9 @@ void Game::draw(sf::RenderWindow& window) {
     // Scale the background to fit the window size
     scaleBackgroundToFit(window);
 
-	// Center the Earth sprite
-	centerEarthSprite(window);
+    // Center the Earth sprite
+    centerEarthSprite(window);
+    earthSprite.setScale(2.f, 2.f);
 
     // Draw background, Earth, player, and enemies
     window.draw(backgroundSprite);
