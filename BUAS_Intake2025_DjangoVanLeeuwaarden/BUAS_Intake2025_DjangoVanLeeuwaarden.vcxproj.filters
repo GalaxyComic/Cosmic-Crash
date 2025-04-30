@@ -5,8 +5,18 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="src\game\Game.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\entities\Player.cpp" />
+    <ClCompile Include="src\entities\Astroid.cpp" />
+    <ClCompile Include="src\menu\MainMenu.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\game\Game.hpp" />
+    <ClInclude Include="src\entities\Astroid.hpp" />
+    <ClInclude Include="src\entities\Player.hpp" />
+    <ClInclude Include="src\menu\MainMenu.hpp" />
   </ItemGroup>
 </Project>
