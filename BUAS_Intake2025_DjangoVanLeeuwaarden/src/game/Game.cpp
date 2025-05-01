@@ -39,7 +39,7 @@ void Game::handleInput(sf::RenderWindow& window) {
         if (e.type == sf::Event::KeyPressed &&
             e.key.code == sf::Keyboard::Escape)
         {
-            backToMainMenu = true;
+			backToMainMenu = true; // temp until pause screen
         }
     }
 
@@ -81,16 +81,16 @@ void Game::spawnAstroid() {
 }
 
 void Game::update() {
-    // 1) Re-center Earth each frame
+    // Re-center Earth each frame
     if (windowPtr)
         centerEarthSprite(*windowPtr);
 
-    // 2) Update player and asteroids
+    // Update player and asteroids
     player.update();
     for (auto& a : enemies)
         a.update();
 
-    // 3) Spawn new asteroid every 2 seconds
+    // Spawn new asteroid every 2 seconds
     static float spawnTimer = 0.f;
     spawnTimer += 1.f / 60.f;
     if (spawnTimer >= 2.f) {
@@ -98,7 +98,7 @@ void Game::update() {
         spawnTimer = 0.f;
     }
 
-    // 4) Collision: Asteroids vs. Earth sprite
+    // Collision: Asteroids vs. Earth sprite
     sf::FloatRect earthBounds = earthSprite.getGlobalBounds();
     enemies.erase(
         std::remove_if(enemies.begin(), enemies.end(),
@@ -111,9 +111,12 @@ void Game::update() {
             }),
         enemies.end()
     );
-    if (lives < 0) lives = 0;
+    if (lives <= 0) {
+        lives = 0;
+		backToMainMenu = true; // temp intill game over screen
+    }
 
-    // 5) Advance Earth animation
+    // Advance Earth animation
     updateEarthAnimation();
 }
 
@@ -135,16 +138,8 @@ void Game::draw(sf::RenderWindow& window) {
     for (auto& a : enemies)
         window.draw(a);
 
-    // Draw lives
-    static sf::Font font;
-    if (!font.getInfo().family.size()) {
-        if (!font.loadFromFile("assets/arial.ttf"))
-            std::cerr << "Failed to load font\n";
-    }
-    sf::Text livesText("Lives: " + std::to_string(lives), font, 24);
-    livesText.setFillColor(sf::Color::White);
-    livesText.setPosition(10.f, 10.f);
-    window.draw(livesText);
+	// Draw lives
+    // hud with picture?
 
     window.display();
 }
