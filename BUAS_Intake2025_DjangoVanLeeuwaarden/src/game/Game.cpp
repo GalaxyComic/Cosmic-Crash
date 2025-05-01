@@ -66,9 +66,13 @@ void Game::handleInput(sf::RenderWindow& window) {
             window.close();
     }
 
-    // Handle player input (from the player class)
+    // Set window pointer for the player to access mouse position
+    player.setWindow(&window);
+
+    // Handle player movement input
     player.handleInput();
 }
+
 
 void Game::update() {
     // Update the player and enemies

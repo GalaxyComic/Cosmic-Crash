@@ -1,2 +1,12 @@
-﻿  Game.cpp
-  BUAS_Intake2025_DjangoVanLeeuwaarden.vcxproj -> C:\Users\panda\Source\Repos\cosmic-crash\x64\Debug\BUAS_Intake2025_DjangoVanLeeuwaarden.exe
+﻿  Player.cpp
+C:\Users\django\source\repos\Cosmic-Crash\BUAS_Intake2025_DjangoVanLeeuwaarden\src\entities\Player.cpp(7,67): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
+C:\Users\django\source\repos\Cosmic-Crash\BUAS_Intake2025_DjangoVanLeeuwaarden\src\entities\Player.cpp(7,67): warning C4244:         with
+C:\Users\django\source\repos\Cosmic-Crash\BUAS_Intake2025_DjangoVanLeeuwaarden\src\entities\Player.cpp(7,67): warning C4244:         [
+C:\Users\django\source\repos\Cosmic-Crash\BUAS_Intake2025_DjangoVanLeeuwaarden\src\entities\Player.cpp(7,67): warning C4244:             T=unsigned int
+C:\Users\django\source\repos\Cosmic-Crash\BUAS_Intake2025_DjangoVanLeeuwaarden\src\entities\Player.cpp(7,67): warning C4244:         ]
+C:\Users\django\source\repos\Cosmic-Crash\BUAS_Intake2025_DjangoVanLeeuwaarden\src\entities\Player.cpp(7,42): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
+C:\Users\django\source\repos\Cosmic-Crash\BUAS_Intake2025_DjangoVanLeeuwaarden\src\entities\Player.cpp(7,42): warning C4244:         with
+C:\Users\django\source\repos\Cosmic-Crash\BUAS_Intake2025_DjangoVanLeeuwaarden\src\entities\Player.cpp(7,42): warning C4244:         [
+C:\Users\django\source\repos\Cosmic-Crash\BUAS_Intake2025_DjangoVanLeeuwaarden\src\entities\Player.cpp(7,42): warning C4244:             T=unsigned int
+C:\Users\django\source\repos\Cosmic-Crash\BUAS_Intake2025_DjangoVanLeeuwaarden\src\entities\Player.cpp(7,42): warning C4244:         ]
+  BUAS_Intake2025_DjangoVanLeeuwaarden.vcxproj -> C:\Users\django\source\repos\Cosmic-Crash\x64\Debug\BUAS_Intake2025_DjangoVanLeeuwaarden.exe

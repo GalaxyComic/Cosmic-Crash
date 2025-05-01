@@ -5,6 +5,7 @@
 int main() {
 	sf::VideoMode desktop = sf::VideoMode::getDesktopMode();
 	sf::RenderWindow window(desktop, "Game", sf::Style::Fullscreen);
+    window.setFramerateLimit(60);
 
     GameState* state = new MainMenu();
 
