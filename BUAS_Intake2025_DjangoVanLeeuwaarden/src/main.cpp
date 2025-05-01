@@ -3,8 +3,8 @@
 #include "game/Game.hpp"
 
 int main() {
-	sf::VideoMode desktop = sf::VideoMode::getDesktopMode();
-	sf::RenderWindow window(desktop, "Game", sf::Style::Fullscreen);
+    sf::VideoMode desktop = sf::VideoMode::getDesktopMode();
+    sf::RenderWindow window(desktop, "Game", sf::Style::Fullscreen);
     window.setFramerateLimit(60);
 
     GameState* state = new MainMenu();
@@ -21,8 +21,14 @@ int main() {
             delete state;
             state = new Game();
         }
+        
+        else if (dynamic_cast<Game*>(state) && static_cast<Game*>(state)->goBackToMainMenu()) {
+            delete state;
+            state = new MainMenu();
+        }
     }
 
     delete state;
     return 0;
 }
+

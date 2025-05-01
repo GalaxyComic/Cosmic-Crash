@@ -2,7 +2,7 @@
 #include <iostream>
 
 Game::Game()
-    : currentFrame(0), frameTime(15.0f), elapsedTime(0.f) {
+    : currentFrame(0), frameTime(15.0f), elapsedTime(0.f), backToMainMenu(false) {
 
     // Load the background texture
     if (!backgroundTexture.loadFromFile("assets/background.png")) {
@@ -64,6 +64,11 @@ void Game::handleInput(sf::RenderWindow& window) {
     while (window.pollEvent(event)) {
         if (event.type == sf::Event::Closed)
             window.close();
+
+                // Check for Escape key to go back to the main menu
+        if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape) {
+            backToMainMenu = true;  // Set flag to true to switch back to the main menu
+        }
     }
 
     // Set window pointer for the player to access mouse position

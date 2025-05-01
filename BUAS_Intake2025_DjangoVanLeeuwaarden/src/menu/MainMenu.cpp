@@ -41,8 +41,6 @@ void MainMenu::handleInput(sf::RenderWindow& window) {
     }
 }
 
-
-
 void MainMenu::draw(sf::RenderWindow& window) {
     window.clear();
 
