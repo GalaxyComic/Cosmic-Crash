@@ -13,26 +13,33 @@ public:
     void update() override;
     void draw(sf::RenderWindow& window) override;
 
-	void centerEarthSprite(const sf::RenderWindow& window); // Function to center the Earth sprite
-
-    bool goBackToMainMenu() const { return backToMainMenu; } // Getter for backToMainMenu
+    bool goBackToMainMenu() const { return backToMainMenu; }
 
 private:
     void scaleBackgroundToFit(const sf::RenderWindow& window);
-    void updateEarthAnimation(); // Function to update Earth sprite animation
+    void updateEarthAnimation();
+    void centerEarthSprite(const sf::RenderWindow& window);
+    void spawnAstroid();
 
-    Player player;
-    std::vector<Astroid> enemies;
+    Player                  player;
+    std::vector<Astroid>    enemies;
 
-    sf::Texture earthTextures[60];
-    sf::Sprite earthSprite;
+    // Earth animation
+    sf::Texture             earthTextures[60];
+    sf::Sprite              earthSprite;
 
-    sf::Texture backgroundTexture;
-    sf::Sprite backgroundSprite;
+    // Background
+    sf::Texture             backgroundTexture;
+    sf::Sprite              backgroundSprite;
 
-    int currentFrame;   // Current frame in the animation
-    float frameTime;    // Time interval between frames
-    float elapsedTime;  // Accumulated time for animation
+    // Game state
+    int                     lives = 3;
 
-	bool backToMainMenu = false; // Flag to switch back to main menu
+    // Animation timing
+    int                     currentFrame;
+    float                   frameTime;
+    float                   elapsedTime;
+
+    bool                    backToMainMenu = false;
+    sf::RenderWindow* windowPtr = nullptr;
 };

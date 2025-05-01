@@ -2,7 +2,7 @@
 #include <cmath>
 
 Player::Player() {
-    texture.loadFromFile("assets/player.png");
+    texture.loadFromFile("assets/player/player_idle.png");
     sprite.setTexture(texture);
     sprite.setScale(0.5f, 0.5f);
     sprite.setOrigin(texture.getSize().x / 2, texture.getSize().y / 2);
