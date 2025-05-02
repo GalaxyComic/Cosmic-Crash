@@ -78,6 +78,26 @@ void Game::update()
        spawnAstroid();  
        spawnTimer -= 2.f;  
    }  
+   // Check collisions (Bullets vs astroid
+   for (auto bulletIt = bullets.begin(); bulletIt != bullets.end(); ) {
+       bool bulletRemoved = false;
+
+       for (auto enemyIt = enemies.begin(); enemyIt != enemies.end(); ) {
+           if (bulletIt->getGlobalBounds().intersects(enemyIt->getGlobalBounds())) {
+               // Remove both bullet and asteroid on hit
+               enemyIt = enemies.erase(enemyIt);
+               bulletIt = bullets.erase(bulletIt);
+               bulletRemoved = true;
+               break; // bullet already erased, move to next one
+           }
+           else {
+               ++enemyIt;
+           }
+       }
+
+       if (!bulletRemoved)
+           ++bulletIt;
+   }
 
    // Check collisions (asteroid vs Earth)  
    sf::FloatRect earthBounds = earthSprite.getGlobalBounds();  
