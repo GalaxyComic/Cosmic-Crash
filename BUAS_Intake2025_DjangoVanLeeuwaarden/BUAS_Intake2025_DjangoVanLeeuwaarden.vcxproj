@@ -132,6 +132,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\entities\Astroid.cpp" />
+    <ClCompile Include="src\entities\Bullet.cpp" />
     <ClCompile Include="src\entities\Player.cpp" />
     <ClCompile Include="src\game\Game.cpp" />
     <ClCompile Include="src\main.cpp" />
@@ -139,6 +140,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\entities\Astroid.hpp" />
+    <ClInclude Include="src\entities\Bullet.hpp" />
     <ClInclude Include="src\entities\Player.hpp" />
     <ClInclude Include="src\GameState.hpp" />
     <ClInclude Include="src\game\Game.hpp" />

@@ -34,6 +34,16 @@ void Game::handleInput(sf::RenderWindow& window)
         {
             backToMainMenu = true; // go back to menu / game-over
         }
+
+        sf::Vector2f direction;
+        if (e.type == sf::Event::MouseButtonPressed && e.mouseButton.button == sf::Mouse::Left) {
+            if (shootCooldown.getElapsedTime().asSeconds() > 0.25f) {
+                if (player.shootDirection(direction)) {
+                    bullets.emplace_back(player.getPosition(), direction);
+                    shootCooldown.restart();
+                }
+            }
+        }
     }
 
     player.setWindow(&window);
@@ -57,6 +67,10 @@ void Game::update()
    player.update();  
    for (auto& a : enemies)  
        a.update(dt);  
+
+   // Update bullets
+   for (auto& b : bullets)
+       b.update(dt);
 
    // Spawn new asteroid every 2 seconds  
    spawnTimer += dt;  
@@ -96,10 +110,20 @@ void Game::draw(sf::RenderWindow& window)
     earthSprite.setScale(2.f, 2.f);
     window.draw(earthSprite);
 
-    // Player & asteroids
+    // Player & asteroids & bullets
     window.draw(player);
     for (auto& a : enemies)
         window.draw(a);
+    for (auto& b : bullets)
+        window.draw(b);
+
+    // Remove Bullets that go out of bounds
+    bullets.erase(
+        std::remove_if(bullets.begin(), bullets.end(), [&](Bullet& b) {
+            return b.isOffScreen(windowPtr->getSize());
+            }),
+        bullets.end()
+    );
 
     // TODO: draw HUD / lives here
 

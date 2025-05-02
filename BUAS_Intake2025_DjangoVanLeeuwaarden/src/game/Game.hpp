@@ -5,6 +5,7 @@
 #include <SFML/System.hpp>
 #include "../entities/Player.hpp"
 #include "../entities/Astroid.hpp"
+#include "../entities/Bullet.hpp"
 #include "../GameState.hpp"
 #include <vector>
 
@@ -38,7 +39,11 @@ private:
 
     // Game state
     int                             lives = 3;
-
+    
+    // Shooting
+    std::vector<Bullet> bullets;
+    sf::Clock shootCooldown;
+    
     // Timing
     sf::Clock                       clock;                  // measures real elapsed time
     int                             currentFrame = 0;

@@ -8,6 +8,8 @@ public:
     void update();
     void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
     void setWindow(sf::RenderWindow* win);
+    bool shootDirection(sf::Vector2f& outDirection);
+    sf::Vector2f getPosition() const;
 
 private:
     sf::Sprite sprite;

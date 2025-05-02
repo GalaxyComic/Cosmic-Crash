@@ -37,6 +37,24 @@ void Player::handleInput() {
     }
 }
 
+bool Player::shootDirection(sf::Vector2f& outDirection) {
+    if (!window) return false;
+
+    sf::Vector2f mousePos = static_cast<sf::Vector2f>(sf::Mouse::getPosition(*window));
+    sf::Vector2f playerPos = sprite.getPosition();
+    sf::Vector2f dir = mousePos - playerPos;
+
+    float len = std::sqrt(dir.x * dir.x + dir.y * dir.y);
+    if (len == 0.f) return false;
+
+    outDirection = dir / len;
+    return true;
+}
+
+sf::Vector2f Player::getPosition() const {
+    return sprite.getPosition();
+}
+
 void Player::update() {
     if (!window) return;
 
