@@ -40,48 +40,48 @@ void Game::handleInput(sf::RenderWindow& window)
     player.handleInput();
 }
 
-void Game::update()
-{
-    if (!windowPtr) return;
+void Game::update()  
+{  
+   if (!windowPtr) return;  
 
-    // 1) Compute real delta‑time
-    float dt = clock.restart().asSeconds();
+   // 1) Compute real delta‑time  
+   float dt = clock.restart().asSeconds();  
 
-    // 2) Re-center Earth each frame
-    centerEarthSprite(*windowPtr);
+   // 2) Re-center Earth each frame  
+   centerEarthSprite(*windowPtr);  
 
-    // 3) Earth animation
-    updateEarthAnimation(dt);
+   // 3) Earth animation  
+   updateEarthAnimation(dt);  
 
-    // 4) Update player & asteroids
-    player.update();
-    for (auto& a : enemies)
-        a.update();
+   // 4) Update player & asteroids  
+   player.update();  
+   for (auto& a : enemies)  
+       a.update(dt);  
 
-    // 5) Spawn new asteroid every 2 seconds
-    spawnTimer += dt;
-    if (spawnTimer >= 2.f) {
-        spawnAstroid();
-        spawnTimer -= 2.f;
-    }
+   // 5) Spawn new asteroid every 2 seconds  
+   spawnTimer += dt;  
+   if (spawnTimer >= 2.f) {  
+       spawnAstroid();  
+       spawnTimer -= 2.f;  
+   }  
 
-    // 6) Check collisions (asteroid vs Earth)
-    sf::FloatRect earthBounds = earthSprite.getGlobalBounds();
-    enemies.erase(
-        std::remove_if(enemies.begin(), enemies.end(),
-            [&](Astroid& a) {
-                if (a.getGlobalBounds().intersects(earthBounds)) {
-                    --lives;
-                    return true;
-                }
-                return false;
-            }),
-        enemies.end()
-    );
-    if (lives <= 0) {
-        lives = 0;
-        backToMainMenu = true;
-    }
+   // 6) Check collisions (asteroid vs Earth)  
+   sf::FloatRect earthBounds = earthSprite.getGlobalBounds();  
+   enemies.erase(  
+       std::remove_if(enemies.begin(), enemies.end(),  
+           [&](Astroid& a) {  
+               if (a.getGlobalBounds().intersects(earthBounds)) {  
+                   --lives;  
+                   return true;  
+               }  
+               return false;  
+           }),  
+       enemies.end()  
+   );  
+   if (lives <= 0) {  
+       lives = 0;  
+       backToMainMenu = true;  
+   }  
 }
 
 void Game::draw(sf::RenderWindow& window)
