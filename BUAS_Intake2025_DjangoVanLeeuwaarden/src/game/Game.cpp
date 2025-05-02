@@ -1,13 +1,8 @@
-#include "Game.hpp"
+﻿#include "Game.hpp"
 #include <iostream>
 #include <algorithm>
 
 Game::Game()
-    : currentFrame(0)
-    , frameTime(15.f)
-    , elapsedTime(0.f)
-    , backToMainMenu(false)
-    , windowPtr(nullptr)
 {
     // Background
     if (!backgroundTexture.loadFromFile("assets/background.png"))
@@ -15,31 +10,29 @@ Game::Game()
     backgroundSprite.setTexture(backgroundTexture);
 
     // Load Earth frames
-    for (int i = 0; i < 60; i++) {
-        if (!earthTextures[i].loadFromFile(
-            "assets/earth/4169310314-" + std::to_string(i) + ".png"))
-        {
-            std::cerr << "Error loading Earth frame " << i << "!\n";
+    for (int i = 0; i < EARTH_FRAMES; i++) {
+        const std::string path = "assets/earth/4169310314-" + std::to_string(i) + ".png";
+        if (!earthTextures[i].loadFromFile(path)) {
+            std::cerr << "Error loading Earth frame " << i << " (" << path << ")!\n";
         }
     }
     earthSprite.setTexture(earthTextures[0]);
-    // Center the origin so positioning and collision use the true center
+    // Center origin for rotation/positioning
     auto eb = earthSprite.getLocalBounds();
     earthSprite.setOrigin(eb.width / 2.f, eb.height / 2.f);
 }
 
-void Game::handleInput(sf::RenderWindow& window) {
+void Game::handleInput(sf::RenderWindow& window)
+{
     windowPtr = &window;
-
     sf::Event e;
     while (window.pollEvent(e)) {
         if (e.type == sf::Event::Closed)
             window.close();
-
         if (e.type == sf::Event::KeyPressed &&
             e.key.code == sf::Keyboard::Escape)
         {
-			backToMainMenu = true; // temp until pause screen
+            backToMainMenu = true; // go back to menu / game-over
         }
     }
 
@@ -47,64 +40,38 @@ void Game::handleInput(sf::RenderWindow& window) {
     player.handleInput();
 }
 
-void Game::centerEarthSprite(const sf::RenderWindow& window) {
-    earthSprite.setPosition(
-        window.getSize().x / 2.f,
-        window.getSize().y / 2.f
-    );
-}
+void Game::update()
+{
+    if (!windowPtr) return;
 
-void Game::scaleBackgroundToFit(const sf::RenderWindow& window) {
-    auto sz = window.getSize();
-    backgroundSprite.setScale(
-        float(sz.x) / backgroundTexture.getSize().x,
-        float(sz.y) / backgroundTexture.getSize().y
-    );
-}
+    // 1) Compute real delta‑time
+    float dt = clock.restart().asSeconds();
 
-void Game::updateEarthAnimation() {
-    elapsedTime += 1.f / 60.f;
-    if (elapsedTime >= frameTime) {
-        currentFrame = (currentFrame + 1) % 60;
-        earthSprite.setTexture(earthTextures[currentFrame]);
-        elapsedTime = 0.f;
-    }
-}
+    // 2) Re-center Earth each frame
+    centerEarthSprite(*windowPtr);
 
-void Game::spawnAstroid() {
-    if (windowPtr && lives > 0) {
-        enemies.emplace_back(
-            earthSprite.getPosition(),
-            windowPtr->getSize()
-        );
-    }
-}
+    // 3) Earth animation
+    updateEarthAnimation(dt);
 
-void Game::update() {
-    // Re-center Earth each frame
-    if (windowPtr)
-        centerEarthSprite(*windowPtr);
-
-    // Update player and asteroids
+    // 4) Update player & asteroids
     player.update();
     for (auto& a : enemies)
         a.update();
 
-    // Spawn new asteroid every 2 seconds
-    static float spawnTimer = 0.f;
-    spawnTimer += 1.f / 60.f;
+    // 5) Spawn new asteroid every 2 seconds
+    spawnTimer += dt;
     if (spawnTimer >= 2.f) {
         spawnAstroid();
-        spawnTimer = 0.f;
+        spawnTimer -= 2.f;
     }
 
-    // Collision: Asteroids vs. Earth sprite
+    // 6) Check collisions (asteroid vs Earth)
     sf::FloatRect earthBounds = earthSprite.getGlobalBounds();
     enemies.erase(
         std::remove_if(enemies.begin(), enemies.end(),
             [&](Astroid& a) {
                 if (a.getGlobalBounds().intersects(earthBounds)) {
-                    lives--;
+                    --lives;
                     return true;
                 }
                 return false;
@@ -113,17 +80,15 @@ void Game::update() {
     );
     if (lives <= 0) {
         lives = 0;
-		backToMainMenu = true; // temp intill game over screen
+        backToMainMenu = true;
     }
-
-    // Advance Earth animation
-    updateEarthAnimation();
 }
 
-void Game::draw(sf::RenderWindow& window) {
+void Game::draw(sf::RenderWindow& window)
+{
     window.clear();
 
-    // Draw background
+    // Background
     scaleBackgroundToFit(window);
     window.draw(backgroundSprite);
 
@@ -131,15 +96,49 @@ void Game::draw(sf::RenderWindow& window) {
     earthSprite.setScale(2.f, 2.f);
     window.draw(earthSprite);
 
-    // Draw player
+    // Player & asteroids
     window.draw(player);
-
-    // Draw all asteroids
     for (auto& a : enemies)
         window.draw(a);
 
-	// Draw lives
-    // hud with picture?
+    // TODO: draw HUD / lives here
 
     window.display();
+}
+
+void Game::centerEarthSprite(const sf::RenderWindow& window)
+{
+    earthSprite.setPosition(
+        window.getSize().x / 2.f,
+        window.getSize().y / 2.f
+    );
+}
+
+void Game::scaleBackgroundToFit(const sf::RenderWindow& window)
+{
+    auto sz = window.getSize();
+    backgroundSprite.setScale(
+        float(sz.x) / backgroundTexture.getSize().x,
+        float(sz.y) / backgroundTexture.getSize().y
+    );
+}
+
+void Game::updateEarthAnimation(float dt)
+{
+    elapsedTime += dt;
+    if (elapsedTime >= frameTime) {
+        currentFrame = (currentFrame + 1) % EARTH_FRAMES;
+        earthSprite.setTexture(earthTextures[currentFrame]);
+        elapsedTime -= frameTime;  // preserve any leftover
+    }
+}
+
+void Game::spawnAstroid()
+{
+    if (windowPtr && lives > 0) {
+        enemies.emplace_back(
+            earthSprite.getPosition(),
+            windowPtr->getSize()
+        );
+    }
 }
