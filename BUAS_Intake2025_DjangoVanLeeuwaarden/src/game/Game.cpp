@@ -44,28 +44,28 @@ void Game::update()
 {  
    if (!windowPtr) return;  
 
-   // 1) Compute real delta‑time  
+   // Compute real delta‑time  
    float dt = clock.restart().asSeconds();  
 
-   // 2) Re-center Earth each frame  
+   // Re-center Earth each frame  
    centerEarthSprite(*windowPtr);  
 
-   // 3) Earth animation  
+   // Earth animation  
    updateEarthAnimation(dt);  
 
-   // 4) Update player & asteroids  
+   // Update player & asteroids  
    player.update();  
    for (auto& a : enemies)  
        a.update(dt);  
 
-   // 5) Spawn new asteroid every 2 seconds  
+   // Spawn new asteroid every 2 seconds  
    spawnTimer += dt;  
    if (spawnTimer >= 2.f) {  
        spawnAstroid();  
        spawnTimer -= 2.f;  
    }  
 
-   // 6) Check collisions (asteroid vs Earth)  
+   // Check collisions (asteroid vs Earth)  
    sf::FloatRect earthBounds = earthSprite.getGlobalBounds();  
    enemies.erase(  
        std::remove_if(enemies.begin(), enemies.end(),  
@@ -129,7 +129,7 @@ void Game::updateEarthAnimation(float dt)
     if (elapsedTime >= frameTime) {
         currentFrame = (currentFrame + 1) % EARTH_FRAMES;
         earthSprite.setTexture(earthTextures[currentFrame]);
-        elapsedTime -= frameTime;  // preserve any leftover
+        elapsedTime -= frameTime; 
     }
 }
 

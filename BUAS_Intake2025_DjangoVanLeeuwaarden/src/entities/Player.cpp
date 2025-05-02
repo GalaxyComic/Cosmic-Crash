@@ -32,7 +32,7 @@ void Player::handleInput() {
 
     // Apply thrust if W is pressed
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
-        float acceleration = 100.f; // Acceleration when thrusting
+        float acceleration = 150.f; // Acceleration when thrusting
         velocity += direction * acceleration * 0.016f;  // Add velocity based on direction and time
     }
 }
