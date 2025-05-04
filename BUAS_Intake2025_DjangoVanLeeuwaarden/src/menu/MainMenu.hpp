@@ -14,13 +14,17 @@ public:
     bool shouldExit() const override;
 
 private:
+
+    // Menu Buttons
     sf::RectangleShape playBox;
     sf::RectangleShape exitBox;
+    bool            playHovered;
+    bool            exitHovered;
+    bool            startGame;
+    bool            exitClicked;
 
-    bool playHovered;
-    bool exitHovered;
-
-    bool startGame;
-    bool exitClicked;
-
+    // Background
+    void scaleBackgroundToFit(const sf::RenderWindow& window);
+    sf::Texture     backgroundTexture;
+    sf::Sprite      backgroundSprite;
 };

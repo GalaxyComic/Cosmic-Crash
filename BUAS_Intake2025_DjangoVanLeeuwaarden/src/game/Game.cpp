@@ -4,6 +4,13 @@
 
 Game::Game()
 {
+    // Lives
+    if (!heartTexture.loadFromFile("assets/heart.png"))
+        std::cerr << "Error loading heart texture!\n";
+    heartSprite.setScale(2.5, 2.5);
+    heartSprite.setTexture(heartTexture);
+    
+
     // Background
     if (!backgroundTexture.loadFromFile("assets/background.png"))
         std::cerr << "Error loading background texture!\n";
@@ -136,6 +143,12 @@ void Game::draw(sf::RenderWindow& window)
         window.draw(a);
     for (auto& b : bullets)
         window.draw(b);
+
+    // Draw health icons
+    for (int i = 0; i < lives; ++i) {
+        heartSprite.setPosition(10.f + i * (heartSprite.getGlobalBounds().width + 5.f), 10.f);
+        window.draw(heartSprite);
+    }
 
     // Remove Bullets that go out of bounds
     bullets.erase(

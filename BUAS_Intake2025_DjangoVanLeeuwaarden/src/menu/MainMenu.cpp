@@ -1,6 +1,9 @@
 #include "MainMenu.hpp"
+#include <iostream>
 
 MainMenu::MainMenu()
+
+
     : playHovered(false), exitHovered(false),
     startGame(false), exitClicked(false) {
     playBox.setSize(sf::Vector2f(200, 50));
@@ -10,6 +13,11 @@ MainMenu::MainMenu()
     exitBox.setSize(sf::Vector2f(200, 50));
     exitBox.setPosition(100, 200);
     exitBox.setFillColor(sf::Color::White);
+
+    // Background
+    if (!backgroundTexture.loadFromFile("assets/background.png"))
+        std::cerr << "Error loading background texture!\n";
+    backgroundSprite.setTexture(backgroundTexture);
 }
 
 void MainMenu::handleInput(sf::RenderWindow& window) {
@@ -41,8 +49,22 @@ void MainMenu::handleInput(sf::RenderWindow& window) {
     }
 }
 
+void MainMenu::scaleBackgroundToFit(const sf::RenderWindow& window)
+{
+    auto sz = window.getSize();
+    backgroundSprite.setScale(
+        float(sz.x) / backgroundTexture.getSize().x,
+        float(sz.y) / backgroundTexture.getSize().y
+    );
+}
+
+
 void MainMenu::draw(sf::RenderWindow& window) {
     window.clear();
+
+    // Background
+    scaleBackgroundToFit(window);
+    window.draw(backgroundSprite);
 
     window.draw(playBox);
     window.draw(exitBox);

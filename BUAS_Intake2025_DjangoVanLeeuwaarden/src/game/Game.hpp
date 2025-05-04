@@ -1,4 +1,3 @@
-// Game.hpp
 #pragma once
 
 #include <SFML/Graphics.hpp>
@@ -39,6 +38,8 @@ private:
 
     // Game state
     int                             lives = 3;
+    sf::Texture heartTexture;
+    sf::Sprite heartSprite;
     
     // Shooting
     std::vector<Bullet> bullets;
