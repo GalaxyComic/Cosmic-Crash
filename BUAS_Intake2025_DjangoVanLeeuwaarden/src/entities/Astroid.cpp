@@ -8,7 +8,7 @@ sf::Texture Astroid::texture;
 Astroid::Astroid(const sf::Vector2f& targetPos, const sf::Vector2u& windowSize) {
     // Lazy-load the texture once
     if (texture.getSize().x == 0) {
-        if (!texture.loadFromFile("assets/enemy.png")) {
+        if (!texture.loadFromFile("assets/enemy/enemy.png")) {
             std::cerr << "Failed to load assets/enemy.png\n";
         }
     }
