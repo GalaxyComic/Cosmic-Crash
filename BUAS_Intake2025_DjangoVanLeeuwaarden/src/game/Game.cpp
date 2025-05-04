@@ -190,8 +190,36 @@ void Game::updateEarthAnimation(float dt)
 void Game::spawnAstroid()
 {
     if (windowPtr && lives > 0) {
+        // Random chance for cluster spawn (e.g., 20% chance for a cluster)
+        int clusterChance = std::rand() % 100;
+
+        if (clusterChance < 20) { // 20% chance to spawn a cluster
+            spawnAstroidCluster();
+        } else {
+            // Spawn a single asteroid as usual
+            enemies.emplace_back(
+                earthSprite.getPosition(),
+                windowPtr->getSize()
+            );
+        }
+    }
+}
+
+void Game::spawnAstroidCluster()
+{
+    // Spawn multiple asteroids for a cluster
+    int clusterSize = std::rand() % 2 + 2;
+
+    for (int i = 0; i < clusterSize; ++i) {
+        // Randomly spread the asteroids in the cluster area
+        sf::Vector2f offset(
+            std::rand() % 200 - 100, // Random horizontal offset between -100 and 100
+            std::rand() % 200 - 100  // Random vertical offset between -100 and 100
+        );
+        
+        // Spawn asteroids at random positions around the center
         enemies.emplace_back(
-            earthSprite.getPosition(),
+            earthSprite.getPosition() + offset,
             windowPtr->getSize()
         );
     }

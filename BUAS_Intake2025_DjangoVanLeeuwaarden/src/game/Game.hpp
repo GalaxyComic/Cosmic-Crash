@@ -23,6 +23,7 @@ private:
     void updateEarthAnimation(float dt);
     void centerEarthSprite(const sf::RenderWindow& window);
     void spawnAstroid();
+    void spawnAstroidCluster();
 
     Player                          player;
     std::vector<Astroid>            enemies;
