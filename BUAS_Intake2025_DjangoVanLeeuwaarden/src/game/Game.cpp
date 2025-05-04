@@ -5,14 +5,13 @@
 Game::Game()
 {
     // Lives
-    if (!heartTexture.loadFromFile("assets/heart.png"))
+    if (!heartTexture.loadFromFile("assets/ui/heart.png"))
         std::cerr << "Error loading heart texture!\n";
     heartSprite.setScale(2.5, 2.5);
     heartSprite.setTexture(heartTexture);
     
-
     // Background
-    if (!backgroundTexture.loadFromFile("assets/background.png"))
+    if (!backgroundTexture.loadFromFile("assets/ui/background.png"))
         std::cerr << "Error loading background texture!\n";
     backgroundSprite.setTexture(backgroundTexture);
 
@@ -157,8 +156,6 @@ void Game::draw(sf::RenderWindow& window)
             }),
         bullets.end()
     );
-
-    // TODO: draw HUD / lives here
 
     window.display();
 }

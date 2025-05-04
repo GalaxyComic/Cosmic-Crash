@@ -15,7 +15,7 @@ MainMenu::MainMenu()
     exitBox.setFillColor(sf::Color::White);
 
     // Background
-    if (!backgroundTexture.loadFromFile("assets/background.png"))
+    if (!backgroundTexture.loadFromFile("assets/ui/background.png"))
         std::cerr << "Error loading background texture!\n";
     backgroundSprite.setTexture(backgroundTexture);
 }
