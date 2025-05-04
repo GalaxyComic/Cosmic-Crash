@@ -1,2 +1,15 @@
-﻿  Astroid.cpp
+﻿  Player.cpp
+C:\Users\panda\source\repos\cosmic-crash\BUAS_Intake2025_DjangoVanLeeuwaarden\src\entities\Player.cpp(9,67): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
+C:\Users\panda\source\repos\cosmic-crash\BUAS_Intake2025_DjangoVanLeeuwaarden\src\entities\Player.cpp(9,67): warning C4244:         with
+C:\Users\panda\source\repos\cosmic-crash\BUAS_Intake2025_DjangoVanLeeuwaarden\src\entities\Player.cpp(9,67): warning C4244:         [
+C:\Users\panda\source\repos\cosmic-crash\BUAS_Intake2025_DjangoVanLeeuwaarden\src\entities\Player.cpp(9,67): warning C4244:             T=unsigned int
+C:\Users\panda\source\repos\cosmic-crash\BUAS_Intake2025_DjangoVanLeeuwaarden\src\entities\Player.cpp(9,67): warning C4244:         ]
+C:\Users\panda\source\repos\cosmic-crash\BUAS_Intake2025_DjangoVanLeeuwaarden\src\entities\Player.cpp(9,42): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
+C:\Users\panda\source\repos\cosmic-crash\BUAS_Intake2025_DjangoVanLeeuwaarden\src\entities\Player.cpp(9,42): warning C4244:         with
+C:\Users\panda\source\repos\cosmic-crash\BUAS_Intake2025_DjangoVanLeeuwaarden\src\entities\Player.cpp(9,42): warning C4244:         [
+C:\Users\panda\source\repos\cosmic-crash\BUAS_Intake2025_DjangoVanLeeuwaarden\src\entities\Player.cpp(9,42): warning C4244:             T=unsigned int
+C:\Users\panda\source\repos\cosmic-crash\BUAS_Intake2025_DjangoVanLeeuwaarden\src\entities\Player.cpp(9,42): warning C4244:         ]
+  Game.cpp
+  main.cpp
+  Generating Code...
   BUAS_Intake2025_DjangoVanLeeuwaarden.vcxproj -> C:\Users\panda\Source\Repos\cosmic-crash\x64\Debug\BUAS_Intake2025_DjangoVanLeeuwaarden.exe
