@@ -134,6 +134,7 @@
     <ClCompile Include="src\entities\Astroid.cpp" />
     <ClCompile Include="src\entities\Bullet.cpp" />
     <ClCompile Include="src\entities\Player.cpp" />
+    <ClCompile Include="src\entities\PowerUp.cpp" />
     <ClCompile Include="src\game\Game.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\menu\MainMenu.cpp" />
@@ -142,6 +143,7 @@
     <ClInclude Include="src\entities\Astroid.hpp" />
     <ClInclude Include="src\entities\Bullet.hpp" />
     <ClInclude Include="src\entities\Player.hpp" />
+    <ClInclude Include="src\entities\PowerUp.hpp" />
     <ClInclude Include="src\GameState.hpp" />
     <ClInclude Include="src\game\Game.hpp" />
     <ClInclude Include="src\menu\MainMenu.hpp" />

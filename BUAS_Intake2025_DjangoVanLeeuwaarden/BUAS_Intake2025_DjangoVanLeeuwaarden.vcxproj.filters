@@ -9,6 +9,8 @@
     <ClCompile Include="src\entities\Astroid.cpp" />
     <ClCompile Include="src\menu\MainMenu.cpp" />
     <ClCompile Include="src\game\Game.cpp" />
+    <ClCompile Include="src\entities\Bullet.cpp" />
+    <ClCompile Include="src\entities\PowerUp.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\entities\Astroid.hpp" />
@@ -16,6 +18,8 @@
     <ClInclude Include="src\menu\MainMenu.hpp" />
     <ClInclude Include="src\game\Game.hpp" />
     <ClInclude Include="src\GameState.hpp" />
+    <ClInclude Include="src\entities\Bullet.hpp" />
+    <ClInclude Include="src\entities\PowerUp.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

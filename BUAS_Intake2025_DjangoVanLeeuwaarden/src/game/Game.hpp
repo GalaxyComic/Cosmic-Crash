@@ -1,10 +1,10 @@
 #pragma once
-
 #include <SFML/Graphics.hpp>
 #include <SFML/System.hpp>
 #include "../entities/Player.hpp"
 #include "../entities/Astroid.hpp"
 #include "../entities/Bullet.hpp"
+#include "../entities/PowerUp.hpp"
 #include "../GameState.hpp"
 #include <vector>
 
@@ -24,9 +24,12 @@ private:
     void centerEarthSprite(const sf::RenderWindow& window);
     void spawnAstroid();
     void spawnAstroidCluster();
+    void spawnPowerUp();
 
+    // Player
     Player                          player;
     std::vector<Astroid>            enemies;
+    std::vector<PowerUp>            powerUps;
 
     // Earth animation
     static constexpr int            EARTH_FRAMES = 60;
@@ -41,11 +44,11 @@ private:
     int                             lives = 3;
     sf::Texture heartTexture;
     sf::Sprite heartSprite;
-    
+
     // Shooting
     std::vector<Bullet> bullets;
     sf::Clock shootCooldown;
-    
+
     // Timing
     sf::Clock                       clock;                  // measures real elapsed time
     int                             currentFrame = 0;
@@ -53,6 +56,17 @@ private:
     float                           elapsedTime = 0.f;      // accumulates dt for Earth
     float                           spawnTimer = 0.f;       // accumulates dt for spawning
 
+    // Powerups
+    bool                            multiShotActive = false;
+    sf::Clock                       multiShotTimer;
+    bool                            rapidFireActive = false;
+    sf::Clock                       rapidFireTimer;
+    bool                            laserActive = false;    // Add laser power-up flag
+
     bool                            backToMainMenu = false;
     sf::RenderWindow* windowPtr = nullptr;
+
+    // Power-up spawn
+    sf::Clock spawnPowerUpClock;
+    float spawnPowerUpInterval = 10.f; // Power-up spawn interval
 };
