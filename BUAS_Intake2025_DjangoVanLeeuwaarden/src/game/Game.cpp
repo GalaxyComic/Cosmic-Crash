@@ -22,6 +22,17 @@ Game::Game()
     scoreText.setFillColor(sf::Color::White);
     scoreText.setPosition(10.f, 50.f);
 
+    // Game over
+    gameOverText.setFont(font);
+    gameOverText.setCharacterSize(48);
+    gameOverText.setFillColor(sf::Color::Red);
+    gameOverText.setString("GAME OVER\nPress Enter to return");
+    gameOverText.setPosition(200.f, 300.f);
+    finalScoreText.setFont(font);
+    finalScoreText.setCharacterSize(32);
+    finalScoreText.setFillColor(sf::Color::White);
+    finalScoreText.setPosition(200.f, 400.f);
+
     // Seed randomness
     std::srand(static_cast<unsigned>(std::time(nullptr)));
 
@@ -60,6 +71,10 @@ void Game::handleInput(sf::RenderWindow& window)
         if (e.type == sf::Event::KeyPressed && e.key.code == sf::Keyboard::Escape)
             backToMainMenu = true;
 
+        if (gameOver && e.type == sf::Event::KeyPressed && e.key.code == sf::Keyboard::Enter) {
+            backToMainMenu = true;
+        }
+
         if (e.type == sf::Event::MouseButtonPressed && e.mouseButton.button == sf::Mouse::Left) {
             float interval = rapidFireActive ? 0.1f : 0.25f;
             if (shootCooldown.getElapsedTime().asSeconds() > interval) {
@@ -93,6 +108,8 @@ void Game::handleInput(sf::RenderWindow& window)
 
 void Game::update()
 {
+    if (gameOver) return;
+
     if (!windowPtr) return;
     float dt = clock.restart().asSeconds();
 
@@ -178,7 +195,9 @@ void Game::update()
     }
     if (lives <= 0) {
         lives = 0;
-        backToMainMenu = true;
+        gameOver = true;
+
+        finalScoreText.setString("Final Score: " + std::to_string(score));
     }
 
     // Remove off-screen bullets
@@ -221,6 +240,12 @@ void Game::draw(sf::RenderWindow& window)
 
     // Draw power-ups
     for (auto& pu : powerUps) window.draw(pu);
+
+    // Draw gameover
+    if (gameOver) {
+        window.draw(gameOverText);
+        window.draw(finalScoreText);
+    }
 
     window.display();
 }

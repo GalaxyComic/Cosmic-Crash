@@ -44,6 +44,9 @@ private:
     int                             lives = 3;
     sf::Texture heartTexture;
     sf::Sprite heartSprite;
+    bool gameOver = false;
+    sf::Text gameOverText;
+    sf::Text finalScoreText;
 
     // Score
     int score = 0;
