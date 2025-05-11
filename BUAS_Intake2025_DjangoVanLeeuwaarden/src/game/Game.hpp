@@ -45,6 +45,11 @@ private:
     sf::Texture heartTexture;
     sf::Sprite heartSprite;
 
+    // Score
+    int score = 0;
+    sf::Font font;
+    sf::Text scoreText;
+
     // Shooting
     std::vector<Bullet> bullets;
     sf::Clock shootCooldown;

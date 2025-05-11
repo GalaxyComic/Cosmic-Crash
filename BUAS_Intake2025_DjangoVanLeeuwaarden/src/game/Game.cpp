@@ -1,14 +1,32 @@
 ﻿#include "Game.hpp"
+#include "../entities/PowerUp.hpp"
 #include <iostream>
 #include <algorithm>
 #include <cstdlib>
 #include <ctime>
 #include <cmath>
 
+// Duration (in seconds) for power-up effects
+static constexpr float POWERUP_DURATION = 10.f;
+// Angle offset in radians for multi-shot spread (e.g. 15°)
+static constexpr float MULTI_SHOT_ANGLE = 15.f * 3.14159265f / 180.f;
+
 Game::Game()
 {
+    // Score
+    if (!font.loadFromFile("assets/ui/font.ttf"))
+        std::cerr << "Error loading font!" << std::endl;
+
+    scoreText.setFont(font);
+    scoreText.setCharacterSize(24);
+    scoreText.setFillColor(sf::Color::White);
+    scoreText.setPosition(10.f, 50.f);
+
     // Seed randomness
     std::srand(static_cast<unsigned>(std::time(nullptr)));
+
+    // Initialize shared power-up textures
+    PowerUp::initTextures();
 
     // Load heart texture (lives)
     if (!heartTexture.loadFromFile("assets/ui/heart.png"))
@@ -25,7 +43,7 @@ Game::Game()
     for (int i = 0; i < EARTH_FRAMES; ++i) {
         std::string path = "assets/earth/4169310314-" + std::to_string(i) + ".png";
         if (!earthTextures[i].loadFromFile(path))
-            std::cerr << "Error loading Earth frame " << i << "!" << std::endl;
+            std::cerr << "Error loading Earth frame " << i << std::endl;
     }
     earthSprite.setTexture(earthTextures[0]);
     auto eb = earthSprite.getLocalBounds();
@@ -43,10 +61,26 @@ void Game::handleInput(sf::RenderWindow& window)
             backToMainMenu = true;
 
         if (e.type == sf::Event::MouseButtonPressed && e.mouseButton.button == sf::Mouse::Left) {
-            if (shootCooldown.getElapsedTime().asSeconds() > 0.25f) {
+            float interval = rapidFireActive ? 0.1f : 0.25f;
+            if (shootCooldown.getElapsedTime().asSeconds() > interval) {
                 sf::Vector2f dir;
                 if (player.shootDirection(dir)) {
-                    bullets.emplace_back(player.getPosition(), dir);
+                    // Multi-shot: spawn three bullets with angular offsets
+                    if (multiShotActive) {
+                        auto spawn = [&](float angleOffset) {
+                            float ang = std::atan2(dir.y, dir.x) + angleOffset;
+                            sf::Vector2f d = { std::cos(ang), std::sin(ang) };
+                            bullets.emplace_back(player.getPosition(), d);
+                            };
+                        spawn(0.f);
+                        spawn(MULTI_SHOT_ANGLE);
+                        spawn(-MULTI_SHOT_ANGLE);
+                    }
+                    else {
+                        // Single bullet (or laser behaves like a normal bullet but penetrates)
+                        bullets.emplace_back(player.getPosition(), dir);
+                    }
+
                     shootCooldown.restart();
                 }
             }
@@ -60,10 +94,9 @@ void Game::handleInput(sf::RenderWindow& window)
 void Game::update()
 {
     if (!windowPtr) return;
-    // Compute delta time
     float dt = clock.restart().asSeconds();
 
-    // Re-center Earth & animate
+    // Center & animate Earth
     centerEarthSprite(*windowPtr);
     updateEarthAnimation(dt);
 
@@ -85,10 +118,6 @@ void Game::update()
                 multiShotActive = true;
                 multiShotTimer.restart();
                 break;
-            case PowerUpType::Laser:
-                laserActive = true;
-                //laserTimer.restart();
-                break;
             case PowerUpType::GainLife:
                 lives = std::min(lives + 1, 5);
                 break;
@@ -99,6 +128,13 @@ void Game::update()
             ++it;
         }
     }
+
+    // Expire power-ups after duration
+    if (rapidFireActive && rapidFireTimer.getElapsedTime().asSeconds() >= POWERUP_DURATION)
+        rapidFireActive = false;
+    if (multiShotActive && multiShotTimer.getElapsedTime().asSeconds() >= POWERUP_DURATION)
+        multiShotActive = false;
+
 
     // Spawn asteroids every 2 seconds
     spawnTimer += dt;
@@ -119,9 +155,7 @@ void Game::update()
         for (auto eit = enemies.begin(); eit != enemies.end();) {
             if (bit->getGlobalBounds().intersects(eit->getGlobalBounds())) {
                 eit = enemies.erase(eit);
-                bit = bullets.erase(bit);
-                removed = true;
-                break;
+                score += 10;
             }
             else {
                 ++eit;
@@ -147,7 +181,7 @@ void Game::update()
         backToMainMenu = true;
     }
 
-    // Remove bullets that are off-screen
+    // Remove off-screen bullets
     bullets.erase(
         std::remove_if(
             bullets.begin(), bullets.end(),
@@ -160,19 +194,21 @@ void Game::update()
 void Game::draw(sf::RenderWindow& window)
 {
     window.clear();
-
-    // Draw background (scaled)
     scaleBackgroundToFit(window);
     window.draw(backgroundSprite);
 
-    // Draw Earth (scaled up)
     earthSprite.setScale(2.f, 2.f);
     window.draw(earthSprite);
 
-    // Draw player, enemies, bullets
+    // Draw player & enemy
     window.draw(player);
     for (auto& a : enemies) window.draw(a);
     for (auto& b : bullets) window.draw(b);
+
+    // Draw score
+    scoreText.setString("Score: " + std::to_string(score));
+    window.draw(scoreText);
+
 
     // Draw lives
     for (int i = 0; i < lives; ++i) {
@@ -191,17 +227,20 @@ void Game::draw(sf::RenderWindow& window)
 
 void Game::spawnPowerUp()
 {
+    // spawn ring around Earth
+    sf::Vector2f center = earthSprite.getPosition();
+    float radius = earthSprite.getGlobalBounds().width * earthSprite.getScale().x / 2.f + 50.f;
+    float angle = static_cast<float>(std::rand()) / RAND_MAX * 2 * 3.14159265f;
+    float x = center.x + radius * std::cos(angle);
+    float y = center.y + radius * std::sin(angle);
     PowerUpType type = static_cast<PowerUpType>(std::rand() % 4);
-    float x = static_cast<float>(std::rand() % windowPtr->getSize().x);
-    float y = static_cast<float>(std::rand() % windowPtr->getSize().y);
     powerUps.emplace_back(type, sf::Vector2f(x, y));
 }
 
 void Game::spawnAstroid()
 {
-    if (!windowPtr || lives <= 0)
-        return;
-    if ((std::rand() % 100) < 20)
+    if (!windowPtr || lives <= 0) return;
+    if ((std::rand() % 100) < 15)
         spawnAstroidCluster();
     else
         enemies.emplace_back(earthSprite.getPosition(), windowPtr->getSize());
@@ -209,7 +248,7 @@ void Game::spawnAstroid()
 
 void Game::spawnAstroidCluster()
 {
-    int clusterSize = std::rand() % 3 + 2;
+    int clusterSize = std::rand() % 2 + 2;
     for (int i = 0; i < clusterSize; ++i) {
         sf::Vector2f offset(
             static_cast<float>(std::rand() % 200 - 100),
@@ -226,8 +265,8 @@ void Game::scaleBackgroundToFit(const sf::RenderWindow& window)
 {
     auto sz = window.getSize();
     backgroundSprite.setScale(
-        static_cast<float>(sz.x) / backgroundTexture.getSize().x,
-        static_cast<float>(sz.y) / backgroundTexture.getSize().y
+        float(sz.x) / backgroundTexture.getSize().x,
+        float(sz.y) / backgroundTexture.getSize().y
     );
 }
 

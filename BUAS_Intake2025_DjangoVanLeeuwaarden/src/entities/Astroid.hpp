@@ -25,5 +25,5 @@ private:
     sf::Sprite            sprite;
     static sf::Texture    texture;        // shared texture for all asteroids
     sf::Vector2f          velocity;       // direction * speed
-    float                 speed = 150.f;  // pixels per second
+    float                 speed = 125.f;  // pixels per second
 };
